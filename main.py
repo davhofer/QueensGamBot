@@ -1,7 +1,7 @@
 import discord
 import json
 import os
-
+import logging
 
 quotes = {}
 
@@ -46,32 +46,32 @@ client = BotClient()
 client.run('ODIyMTU4MzE0MDI4MTM4NTU2.YFOMmQ.EelUuGxZKSKQG100KXV4xbAEgNU')
 
 
-#
-# #bot commands
-# class BotCommand:
-#     def __init__(self,name,func,help):
-#         self.name = name
-#         self.run = func
-#         self.help = help
-#
-#
-#
-# botc = {}
-#
-#
-# botc["ping"] = BotCommand("ping", lambda msg: await msg.channel.send(":ping_pong: Pong!"),"$ping - check if I'm still alive")
-#
-# botc["author"] = BotCommand("author", lambda msg: await msg.channel.send("I created myself. Jokes on you."),"$author - my great and wonderful creator")
-#
-# botc["quote"]
-#
-# with open('quotes.json', 'w') as f:
-#     json.dump(quotes, f)
-#     f.close()
-#
-# #await message.channel.send("QUEENS GAMBOT :crown:\nCommands:\n$help - this is how you got here\n$author - my great and wonderful creator\n$ping - check if I'm still alive\n$q <user> <text> - add a quote for <user>\n$quote <user> <number> - get a specific quote from <user>. If no number is given, choose randomly\nmore tbd")
-# help_text = "QUEENS GAMBOT :crown:\nCommands:\n$help - this is how you got here"
-# for key in botc.keys():
-#     help_text +=  "\n"+botc[key].help
-#
-# botc["help"] = BotCommand("help", lambda msg: await msg.channel.send(help_text),help_text)
+
+#bot commands
+class BotCommand:
+    def __init__(self,name,func,help):
+        self.name = name
+        self.run = func
+        self.help = help
+
+
+
+botc = {}
+
+
+botc["ping"] = BotCommand("ping", lambda msg: await msg.channel.send(":ping_pong: Pong!"),"$ping - check if I'm still alive")
+
+botc["author"] = BotCommand("author", lambda msg: await msg.channel.send("I created myself. Jokes on you."),"$author - my great and wonderful creator")
+
+botc["quote"]
+
+with open('quotes.json', 'w') as f:
+    json.dump(quotes, f)
+    f.close()
+
+#await message.channel.send("QUEENS GAMBOT :crown:\nCommands:\n$help - this is how you got here\n$author - my great and wonderful creator\n$ping - check if I'm still alive\n$q <user> <text> - add a quote for <user>\n$quote <user> <number> - get a specific quote from <user>. If no number is given, choose randomly\nmore tbd")
+help_text = "QUEENS GAMBOT :crown:\nCommands:\n$help - this is how you got here"
+for key in botc.keys():
+    help_text +=  "\n"+botc[key].help
+
+botc["help"] = BotCommand("help", lambda msg: await msg.channel.send(help_text),help_text)
