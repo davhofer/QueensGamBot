@@ -4,10 +4,15 @@ import json
 import os
 import logging
 import random
+from datetime import datetime
+
 
 with open('.env','r') as f:
     token = f.readline()
     f.close()
+
+
+running_since = datetime.now()
 
 
 logger = logging.getLogger('discord')
@@ -110,6 +115,11 @@ async def q(ctx, name: str, *quote: str):
          json.dump(quotes, f)
          f.close()
     await ctx.send("Quote for {0} added!".format(name))
+
+@bot.command()
+async def uptime(ctx):
+    """How long the bot's been running"""
+    await ctx.send("Uptime: " + str(datetime.now()-running_since))
 
 @bot.command()
 async def quote(ctx, name: str, number=None):
