@@ -6,6 +6,8 @@ import logging
 import random
 from datetime import datetime
 from chessdotcom import get_player_stats
+import nest_asyncio
+nest_asyncio.apply()
 
 
 with open('.env','r') as f:
