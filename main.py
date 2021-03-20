@@ -180,9 +180,9 @@ async def chessdotcom(ctx, name: str):
         # print(r.json['stats']['chess_daily'])
         # print(r.json['stats']['chess_bullet']['latest']['rating'])
         for n in ['bullet','blitz','rapid','daily']:
-            mode = 'chess_'+n
             try:
-                msg += n+": "+(r.json['stats'][mode]['last']['rating'])+"\n"
+                print(r.json['stats']["chess_"+n]['last']['rating'])
+                msg += n+": "+(r.json['stats']["chess_"+n]['last']['rating'])+"\n"
             except Exception:
                 msg += n+": unrated\n"
 
