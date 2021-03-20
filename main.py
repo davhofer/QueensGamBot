@@ -162,12 +162,18 @@ async def chessdotcom(ctx, name: str):
     """Get chess.com stats and info about this player"""
     print(name)
     try:
+        print('1')
         r = get_player_stats(name)
+        print('2')
         stat_msg = []
+        print('3')
         for n in ['bullet','blitz','rapid','daily']:
             stat_msg.append(n+": "+r.json['stats']['chess_'+n]['last']['rating']+"\n")
+        print('4')
         msg = "Chess.com stats for " + name + "\n" + ''.join(stat_msg)
+        print('5')
         await ctx.send(msg)
+        print('6')
     except Exception as e:
         print(str(e))
         await ctx.send("There is no chess.com user with that username!")
