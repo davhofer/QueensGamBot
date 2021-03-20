@@ -161,9 +161,11 @@ async def hi(ctx):
 async def chessdotcom(ctx, name: str):
     """Get chess.com stats and info about this player"""
     print(name)
+    r = get_player_stats(name)
+    print(r)
     try:
         print('1')
-        r = await get_player_stats(name)
+        r = get_player_stats(name)
         print('2')
         stat_msg = []
         print('3')
