@@ -163,7 +163,7 @@ async def chessdotcom(ctx, name: str):
     print(name)
     try:
         print('1')
-        await r = get_player_stats(name)
+        r = await get_player_stats(name)
         print('2')
         stat_msg = []
         print('3')
