@@ -28,8 +28,7 @@ with open('quotes.json') as f:
     quotes = json.load(f)
     f.close()
 
-description = ''' Queens GamBot
-'''
+description = ''' Queens GamBot'''
 
 intents = discord.Intents.default()
 #intents.members = True
@@ -107,6 +106,8 @@ async def ping(ctx):
     """Check if I'm still alive"""
     await ctx.send(":ping_pong: Pong!")
 
+
+
 @bot.command()
 async def q(ctx, name: str, *quote: str):
     """Add a quote for someone. To see quotes, use $quote"""
@@ -166,34 +167,26 @@ async def chessdotcom(ctx, name: str):
     #r = get_player_stats(name)
     #print(r)
     try:
-        print('1')
         r = get_player_stats(name)
-        print('2')
         stat_msg = []
-        print('3')
         msg = "Chess.com stats for " + name + "\n"
-        # print(msg)
-        # print(r.json['stats'])
-        # print(r.json['stats']['chess_bullet'])
-        # print(r.json['stats']['chess_blitz'])
-        # print(r.json['stats']['chess_rapid'])
-        # print(r.json['stats']['chess_daily'])
-        # print(r.json['stats']['chess_bullet']['latest']['rating'])
         for n in ['bullet','blitz','rapid','daily']:
             try:
                 rating = r.json['stats']["chess_"+n]['last']['rating']
                 msg += n+": "+str(rating)+"\n"
             except Exception:
                 msg += n+": unrated\n"
-
         await ctx.send(msg)
-        print('5')
     except Exception as e:
         print("E:" + str(e))
         print(Exception)
         await ctx.send("There is no chess.com user with that username!")
 
 
+@bot.command(name="admin")
+@commands.has_any_role('MC','admin')
+async def admin_com(ctx):
+    await ctx.send("You have admin privileges!")
 
 
 
