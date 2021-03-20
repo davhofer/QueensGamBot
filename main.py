@@ -198,6 +198,15 @@ async def on_command_error(ctx, error):
     else:
         await ctx.send("Error! :open_mouth: ")
 
+@bot.command()
+async def latency(ctx):
+    """Returns the latency of the bot"""
+    ms = (ctx.message.created_at - datetime.datetime.now()).milliseconds
+    edit = str(ctx.message.created_at - datetime.datetime.utcnow())
+    answer = 'Latency is ' +str(int(float(edit.split(':')[2])*1000)) + 'ms'
+    await ctx.send(answer)
+    await ctx.send(str(ms))
+
 
 
 bot.run(token)
