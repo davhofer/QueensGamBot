@@ -189,7 +189,7 @@ async def admin_com(ctx):
     await ctx.send("You have admin privileges!")
 
 
-@bot.event()
+@bot.event
 async def on_command_error(ctx, error):
     if isinstance(error, commands.MissingRequiredArgument):
         await ctx.send("One or more required arguments are missing. Use $help <command> to see how to use it.")
