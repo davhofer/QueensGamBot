@@ -60,17 +60,17 @@ async def choose(ctx, *choices: str):
     """Choose between multiple choices"""
     await ctx.send(random.choice(choices))
 
-@bot.command()
-async def repeat(ctx, times: int, content='repeating...'):
-    """Repeats a message multiple times"""
-    for i in range(times):
-        await ctx.send(content)
+# @bot.command()
+# async def repeat(ctx, times: int, content='repeating...'):
+#     """Repeats a message multiple times"""
+#     for i in range(times):
+#         await ctx.send(content)
 
-@bot.command()
-async def joined(ctx, member: discord.Member):
-    """do stuff when a member joins"""
-    #await ctx.send('{0.name} joined in {0.joined_at}'.format(member))
-    return
+# @bot.command()
+# async def joined(ctx, member: discord.Member):
+#     """do stuff when a member joins"""
+#     #await ctx.send('{0.name} joined in {0.joined_at}'.format(member))
+#     return
 
 @bot.group()
 async def cool(ctx):
@@ -193,10 +193,10 @@ async def admin_com(ctx):
 async def on_command_error(ctx, error):
     if isinstance(error, commands.MissingRequiredArgument):
         await ctx.send("One or more required arguments are missing. Use $help <command> to see how to use it.")
-    elif isinstance(error, commands.MissingPermissions):
+    elif isinstance(error, commands.MissingPermissions) or isinstance(error, commands.MissingRole):
         await ctx.send("You do not have the necessary permissions to use this command!")
     else:
-        await ctx.send("Error! :O")
+        await ctx.send("Error! :open_mouth: ")
 
 
 
