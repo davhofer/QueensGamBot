@@ -196,6 +196,7 @@ async def on_command_error(ctx, error):
     elif isinstance(error, commands.MissingPermissions) or isinstance(error, commands.MissingRole) or isinstance(error, commands.MissingAnyRole):
         await ctx.send("You do not have the necessary permissions to use this command!")
     else:
+        print(error)
         await ctx.send("Error! :open_mouth: ")
 
 @bot.command()
