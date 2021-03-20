@@ -5,6 +5,7 @@ import os
 import logging
 import random
 from datetime import datetime
+import chessdotcom
 
 
 with open('.env','r') as f:
@@ -155,5 +156,23 @@ async def hi(ctx):
     msg = random.choice(greetings)+", "+ctx.message.author.mention
 
     await ctx.send(msg)
+
+@bot.command()
+async def chessdotcom(ctx, name: str):
+    """Get chess.com stats and info about this player"""
+    try:
+        r = chessdotcom.get_player_stats(name)
+    except Exception:
+        await ctx.send("There is no chess.com user with that username!")
+        return
+    stat_msg = []
+    for n in ['bullet','blitz','rapid','daily']:
+        stat_msg.append(n+": "+r.json['stats']['chess_'+n]['last']['rating']+"\n")
+    msg = "Chess.com stats for " + name + "\n" + ''.join(stat_msg)
+    await ctx.send(msg)
+
+
+
+
 
 bot.run(token)
