@@ -152,6 +152,6 @@ async def uptime(ctx):
 async def hi(ctx):
     """Say hi!"""
     greetings = ["Hello", "Hi", "Howdy", "Sup", "wassup", "How you doin'","What's popping"]
-    await ctx.send(str(random.choice(greetings))+", {0}".format(ctx.message.author.mention()))
+    await ctx.send((random.choice(greetings)+", {0}").format(ctx.message.author.mention()))
 
 bot.run(token)
