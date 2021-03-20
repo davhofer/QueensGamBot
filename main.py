@@ -116,10 +116,6 @@ async def q(ctx, name: str, *quote: str):
          f.close()
     await ctx.send("Quote for {0} added!".format(name))
 
-@bot.command()
-async def uptime(ctx):
-    """How long the bot's been running"""
-    await ctx.send("Uptime: " + str(datetime.now()-running_since))
 
 @bot.command()
 async def quote(ctx, name: str, number=None):
@@ -147,5 +143,15 @@ async def quote(ctx, name: str, number=None):
         except Exception:
             await ctx.send("Third parameter must either be left out, 'all' or a number!")
 
+@bot.command()
+async def uptime(ctx):
+    """How long the bot's been running"""
+    await ctx.send("Uptime: " + str(datetime.now()-running_since))
+
+@bot.command()
+async def hi(ctx):
+    """Say hi!"""
+    greetings = ["Hello", "Hi", "Howdy", "Sup", "wassup", "How you doin'","What's popping"]
+    await ctx.send(str(random.choice(greetings))+", {0}".format(ctx.message.author.mention()))
 
 bot.run(token)
