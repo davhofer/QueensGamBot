@@ -172,18 +172,19 @@ async def chessdotcom(ctx, name: str):
         stat_msg = []
         print('3')
         msg = "Chess.com stats for " + name + "\n"
-        print(msg)
-        print(r.json['stats'])
-        print(r.json['stats']['chess_bullet'])
-        print(r.json['stats']['chess_blitz'])
-        print(r.json['stats']['chess_rapid'])
-        print(r.json['stats']['chess_daily'])
-        print(r.json['stats']['chess_bullet']['latest']['rating'])
-        # for n in ['bullet','blitz','rapid','daily']:
-        #     mode = 'chess_'+n
-        #     msg += n+": "+(r.json['stats'][mode]['last']['rating'])+"\n"
-        print('4')
-
+        # print(msg)
+        # print(r.json['stats'])
+        # print(r.json['stats']['chess_bullet'])
+        # print(r.json['stats']['chess_blitz'])
+        # print(r.json['stats']['chess_rapid'])
+        # print(r.json['stats']['chess_daily'])
+        # print(r.json['stats']['chess_bullet']['latest']['rating'])
+        for n in ['bullet','blitz','rapid','daily']:
+            mode = 'chess_'+n
+            try:
+                msg += n+": "+(r.json['stats'][mode]['last']['rating'])+"\n"
+            except Exception:
+                msg += n+": unrated\n"
 
         await ctx.send(msg)
         print('5')
