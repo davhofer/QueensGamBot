@@ -193,7 +193,7 @@ async def admin_com(ctx):
 async def on_command_error(ctx, error):
     if isinstance(error, commands.MissingRequiredArgument):
         await ctx.send("One or more required arguments are missing. Use $help <command> to see how to use it.")
-    elif isinstance(error, commands.MissingPermissions) or isinstance(error, commands.MissingRole):
+    elif isinstance(error, commands.MissingPermissions) or isinstance(error, commands.MissingRole) or isinstance(error, commands.MissingAnyRole):
         await ctx.send("You do not have the necessary permissions to use this command!")
     else:
         await ctx.send("Error! :open_mouth: ")
