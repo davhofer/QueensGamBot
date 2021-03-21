@@ -194,17 +194,24 @@ async def chessdotcom(ctx, name: str):
             print("E:" + str(e))
             print(Exception)
             await ctx.send("There is no chess.com user with that username!")
+#
+# @chessdotcom.command(name="testname")
+# async def _chessdotcom(ctx, username: str):
+#     """save your chess.com username"""
+#     name_mapping[ctx.message.author] = username
+#     with open('data.json', 'w') as f:
+#          json.dump(data, f)
+#          f.close()
+#     await ctx.send('chess.com username saved!')
 
-@chessdotcom.command(name="testname")
-async def _chessdotcom(ctx, username: str):
+@bot.command(name="username")
+async def save_username(ctx, name: str):
     """save your chess.com username"""
     name_mapping[ctx.message.author] = username
     with open('data.json', 'w') as f:
          json.dump(data, f)
          f.close()
     await ctx.send('chess.com username saved!')
-
-
 
 
 # dev commands
