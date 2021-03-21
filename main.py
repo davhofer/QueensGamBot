@@ -197,8 +197,8 @@ async def chessdotcom(ctx, name: str):
             print(Exception)
             await ctx.send("There is no chess.com user with that username!")
 
-@chessdotcom.command(name="name")
-async def _name(ctx, username: str):
+@chessdotcom.command(name="testname")
+async def _chessdotcom(ctx, username: str):
     """save your chess.com username"""
     name_mapping[ctx.message.author] = username
     with open('data.json', 'w') as f:
