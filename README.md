@@ -23,3 +23,5 @@ CHANGELOG
 Most recent changes
 21.03.21
 - Create changelog
+
+END CHANGELOG
