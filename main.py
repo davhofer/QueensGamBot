@@ -207,7 +207,7 @@ async def chessdotcom(ctx, name: str):
 @bot.command(name="username")
 async def save_username(ctx, name: str):
     """save your chess.com username"""
-    name_mapping[ctx.message.author] = username
+    name_mapping[ctx.message.author] = name
     with open('data.json', 'w') as f:
          json.dump(data, f)
          f.close()
