@@ -20,7 +20,9 @@ with open('data.json') as f:
     f.close()
 
 insults = data['insults']
+name_mapping = data['name_mapping']
 running_since = datetime.now()
+
 
 
 logger = logging.getLogger('discord')
@@ -172,27 +174,39 @@ async def uptime(ctx):
 #
 #     await ctx.send(msg)
 
-@bot.command()
+@bot.group()
 async def chessdotcom(ctx, name: str):
     """Get chess.com stats and info about this player"""
     print(name)
     #r = get_player_stats(name)
     #print(r)
-    try:
-        r = get_player_stats(name)
-        stat_msg = []
-        msg = "Chess.com stats for " + name + "\n"
-        for n in ['bullet','blitz','rapid','daily']:
-            try:
-                rating = r.json['stats']["chess_"+n]['last']['rating']
-                msg += n+": "+str(rating)+"\n"
-            except Exception:
-                msg += n+": unrated\n"
-        await ctx.send(msg)
-    except Exception as e:
-        print("E:" + str(e))
-        print(Exception)
-        await ctx.send("There is no chess.com user with that username!")
+    if ctx.invoked_subcommand is None:
+        try:
+            r = get_player_stats(name)
+            stat_msg = []
+            msg = "Chess.com stats for " + name + "\n"
+            for n in ['bullet','blitz','rapid','daily']:
+                try:
+                    rating = r.json['stats']["chess_"+n]['last']['rating']
+                    msg += n+": "+str(rating)+"\n"
+                except Exception:
+                    msg += n+": unrated\n"
+            await ctx.send(msg)
+        except Exception as e:
+            print("E:" + str(e))
+            print(Exception)
+            await ctx.send("There is no chess.com user with that username!")
+
+@chessdotcom.command(name="*name")
+async def _name(ctx, username: str):
+    name_mapping[ctx.message.author] = username
+    with open('data.json', 'w') as f:
+         json.dump(data, f)
+         f.close()
+    await ctx.send('chess.com username saved!')
+
+
+
 
 # dev commands
 
@@ -200,7 +214,7 @@ async def chessdotcom(ctx, name: str):
 async def temp(ctx):
     """Returns the CPU Temp of the bot"""
     cpu=CPUTemperature()
-    temp = str((int(10*(cpu.temperature)))/10)
+    temp = str(round(cpu.temparature,1))
     await ctx.send('CPU temperature is ' + temp + '°C')
 
 
