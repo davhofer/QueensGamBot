@@ -6,6 +6,7 @@ import logging
 import random
 from datetime import datetime
 from chessdotcom import get_player_stats
+from gpiozero import CPUTemperature
 import nest_asyncio
 nest_asyncio.apply()
 
@@ -163,13 +164,13 @@ async def uptime(ctx):
     """How long the bot's been running"""
     await ctx.send("Uptime: " + str(datetime.now()-running_since))
 
-@bot.command()
-async def hi(ctx):
-    """Say hi!"""
-    greetings = ["Hello", "Hi", "Howdy", "Sup", "wassup", "How you doin'","What's popping"]
-    msg = random.choice(greetings)+", "+ctx.message.author.mention
-
-    await ctx.send(msg)
+# @bot.command()
+# async def hi(ctx):
+#     """Say hi!"""
+#     greetings = ["Hello", "Hi", "Howdy", "Sup", "wassup", "How you doin'","What's popping"]
+#     msg = random.choice(greetings)+", " + ctx.message.author.mention
+#
+#     await ctx.send(msg)
 
 @bot.command()
 async def chessdotcom(ctx, name: str):
@@ -193,6 +194,28 @@ async def chessdotcom(ctx, name: str):
         print(Exception)
         await ctx.send("There is no chess.com user with that username!")
 
+# dev commands
+
+@bot.command()
+async def temp(ctx):
+    """Returns the CPU Temp of the bot"""
+    cpu=CPUTemperature()
+    temp = str((int(10*(cpu.temperature)))/10)
+    await ctx.send('CPU temperature is ' + temp + '°C')
+
+
+@bot.command()
+async def latency(ctx):
+    """Returns the latency of the bot"""
+    ms = (ctx.message.created_at - datetime.utcnow()).microseconds / 1000
+    # edit = str(ctx.message.created_at - datetime.utcnow())
+    # answer = 'Latency is ' +str(int(float(edit.split(':')[2])*1000)) + 'ms'
+    await ctx.send(str(int(ms)) + 'ms')
+    # await ctx.send(answer)
+    print(str(ms))
+    #await ctx.send(str(ms))
+
+
 
 @bot.group()
 @commands.has_any_role('MC','admin')
@@ -214,17 +237,6 @@ async def on_command_error(ctx, error):
     else:
         print(error)
         await ctx.send("yeah uhm listen, this ain't gonna work...")
-
-@bot.command()
-async def latency(ctx):
-    """Returns the latency of the bot"""
-    ms = (ctx.message.created_at - datetime.utcnow()).microseconds / 1000
-    # edit = str(ctx.message.created_at - datetime.utcnow())
-    # answer = 'Latency is ' +str(int(float(edit.split(':')[2])*1000)) + 'ms'
-    await ctx.send(str(int(ms)) + 'ms')
-    # await ctx.send(answer)
-    print(str(ms))
-    #await ctx.send(str(ms))
 
 
 
