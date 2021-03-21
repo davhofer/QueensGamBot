@@ -14,7 +14,11 @@ with open('.env','r') as f:
     token = f.readline()
     f.close()
 
+with open('data.json') as f:
+    data = json.load(f)
+    f.close()
 
+insults = data['insults']
 running_since = datetime.now()
 
 
@@ -43,10 +47,14 @@ async def on_ready():
     print(bot.user.id)
     print('------')
 
-@bot.command()
-async def add(ctx, left:int, right:int):
-    """Add two numbers"""
-    await ctx.send(left + right)
+# @bot.command()
+# async def add(ctx, left:int, right:int):
+#     """Add two numbers"""
+#     await ctx.send(left + right)
+
+@bot.before_invoke
+async def preprocess(message):
+    print("before invoke")
 
 @bot.command()
 async def roll(ctx):
@@ -78,23 +86,26 @@ async def cool(ctx):
     In reality this just checks if a subcommand is being invoked.
     """
     if ctx.invoked_subcommand is None:
-        await ctx.send('No, {0.subcommand_passed} is not cool'.format(ctx))
+        if random.randint(1,100) > 90:
+            await ctx.send('{0.subcommand_passed} is kinda cool'.format(ctx))
+        else:
+            await ctx.send('No, {0.subcommand_passed} is not cool'.format(ctx))
 
 @cool.command(name='bot')
 async def _bot(ctx):
     """Is the bot cool?"""
     await ctx.send('Yes, the bot is cool.')
 
-@cool.command(name='david')
+@cool.command(name='david',aliases=['@david','dave'])
 async def _bot(ctx):
     """Is david cool?"""
-    await ctx.send('Yes, david is cool.')
+    await ctx.send('Yes, {0.subcommand_passed} is cool.'.format(ctx))
 
 
-@cool.command(name='lukas')
+@cool.command(name='lukas',aliases=['Lukas','Kazar','@KazarEzClap'])
 async def _bot(ctx):
     """Is lukas cool?"""
-    await ctx.send('Yes, lukas is cool.')
+    await ctx.send('Yes, {0.subcommand_passed} is cool.'.format(ctx))
 
 @bot.command()
 async def author(ctx):
@@ -183,10 +194,15 @@ async def chessdotcom(ctx, name: str):
         await ctx.send("There is no chess.com user with that username!")
 
 
-@bot.command(name="admin")
+@bot.group()
 @commands.has_any_role('MC','admin')
-async def admin_com(ctx):
-    await ctx.send("You have admin privileges!")
+async def admin(ctx):
+    if ctx.invoked_subcommand is None:
+        await ctx.send("chef")
+
+@admin.command(name='insult')
+async def _admin(ctx, recipient: str):
+    await ctx.send("Yo {0}. " + random.choice(insults))
 
 
 @bot.event
@@ -194,20 +210,22 @@ async def on_command_error(ctx, error):
     if isinstance(error, commands.MissingRequiredArgument):
         await ctx.send("One or more required arguments are missing. Use $help <command> to see how to use it.")
     elif isinstance(error, commands.MissingPermissions) or isinstance(error, commands.MissingRole) or isinstance(error, commands.MissingAnyRole):
-        await ctx.send("You do not have the necessary permissions to use this command!")
+        await ctx.send("you're too weak to use this command bruh")
     else:
         print(error)
-        await ctx.send("Error! :open_mouth: ")
+        await ctx.send("yeah uhm listen, this ain't gonna work...")
 
 @bot.command()
 async def latency(ctx):
     """Returns the latency of the bot"""
-    ms = (ctx.message.created_at - datetime.now()).microseconds / 1000
-    edit = str(ctx.message.created_at - datetime.utcnow())
-    answer = 'Latency is ' +str(int(float(edit.split(':')[2])*1000)) + 'ms'
-    await ctx.send(str(ms))
+    ms = (ctx.message.created_at - datetime.utcnow()).microseconds / 1000
+    # edit = str(ctx.message.created_at - datetime.utcnow())
+    # answer = 'Latency is ' +str(int(float(edit.split(':')[2])*1000)) + 'ms'
+    await ctx.send(str(int(ms)) + 'ms')
+    # await ctx.send(answer)
     print(str(ms))
     #await ctx.send(str(ms))
+
 
 
 
