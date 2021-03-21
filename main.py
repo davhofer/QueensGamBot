@@ -202,7 +202,7 @@ async def admin(ctx):
 
 @admin.command(name='insult')
 async def _admin(ctx, recipient: str):
-    await ctx.send("Yo {0}. " + random.choice(insults))
+    await ctx.send("Yo {0}. ".format(recipient) + random.choice(insults))
 
 
 @bot.event
