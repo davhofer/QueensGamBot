@@ -177,9 +177,7 @@ async def uptime(ctx):
 @bot.group()
 async def chessdotcom(ctx, name: str):
     """Get chess.com stats and info about this player"""
-    print(name)
-    #r = get_player_stats(name)
-    #print(r)
+    print(ctx.invoked_subcommand)
     if ctx.invoked_subcommand is None:
         try:
             r = get_player_stats(name)
