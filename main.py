@@ -226,8 +226,7 @@ async def chessdotcom(ctx, name: str):
                 name = name_mapping[ctx.message.mentions[0].name]
             else:
                 await ctx.send("This user hasn't saved his chess.com username yet!")
-                print(name)
-        print(name)
+                return
         r = get_player_stats(name)
         stat_msg = []
         msg = "Chess.com stats for " + name + "\n"
