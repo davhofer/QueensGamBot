@@ -233,9 +233,9 @@ async def save_username(ctx, name: str):
 async def stats(ctx):
     """Stats, mainly for developing purposes"""
     if ctx.invoked_subcommand == None:
-        _temp(ctx)
-        _latency(ctx)
-        _uptime(ctx)
+        await _temp(ctx)
+        await _latency(ctx)
+        await _uptime(ctx)
 
 @stats.command(name='temp')
 async def _temp(ctx):
