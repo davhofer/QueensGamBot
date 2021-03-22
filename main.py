@@ -233,15 +233,15 @@ async def save_username(ctx, name: str):
 async def stats(ctx):
     """Stats, mainly for developing purposes"""
     if ctx.invoked_subcommand == None:
-        temp(ctx)
-        latency(ctx)
-        uptime(ctx)
+        _temp(ctx)
+        _latency(ctx)
+        _uptime(ctx)
 
 @stats.command(name='temp')
 async def _temp(ctx):
     """Returns the CPU Temp of the bot"""
     cpu=CPUTemperature()
-    temp = str(round(cpu.temparature,1))
+    temp = str(round(cpu.temperature,1))
     await ctx.send('CPU temperature is ' + temp + '°C')
 
 
