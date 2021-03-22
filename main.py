@@ -125,10 +125,8 @@ async def ping(ctx):
 @bot.command()
 async def q(ctx, name: str, *quote: str):
     """Add a quote for someone. To see quotes, use $quote"""
-    if len(ctx.message.mentions) == 0 or not name.startswith('<@'):
-        await ctx.send("Please tag the user you want to add a quote for: `$q @user quote`")
-        return
-    name = ctx.message.mentions[0].name
+    if not (len(ctx.message.mentions) == 0 or not name.startswith('<@')):
+        name = ctx.message.mentions[0].name
     if name not in quotes.keys():
         quotes[name] = [' '.join(quote)]
     else:
@@ -142,16 +140,17 @@ async def q(ctx, name: str, *quote: str):
 @bot.command()
 async def quote(ctx, name: str, number=None):
     """Get quotes of someone. To add quotes, use $q. You can leave <number> out to get a random quote, or write 'all' to see all quotes."""
-    if len(ctx.message.mentions) == 0:
-        await ctx.send("Please tag the user you want to get quotes from: `$quote @user [option]`")
-        return
-    name = ctx.message.mentions[0].name
+    if not len(ctx.message.mentions) == 0:
+        name = ctx.message.mentions[0].name
+        nick = ctx.message.mentions[0].nick
+    else:
+        nick = name
     if name not in quotes.keys():
-        await ctx.send("{0} doesn't have any quotes yet!".format(name))
+        await ctx.send("{0} doesn't have any quotes yet!".format(nick))
         return
     if number==None:
         quote = random.choice(quotes[name])
-        await ctx.send("'{0}' ~{1}".format(quote,name))
+        await ctx.send("'{0}' ~{1}".format(quote,nick))
     elif number=='all':
         #display all quotes
         msg = ""
