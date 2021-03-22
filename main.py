@@ -292,7 +292,7 @@ async def _latency(ctx):
 @stats.command(name='uptime')
 async def _uptime(ctx):
     """Returns how long the bot's been running"""
-    await ctx.send("Uptime: " + str(datetime.now()-running_since)-split('.')[0])
+    await ctx.send("Uptime: " + str(datetime.now()-running_since).split('.')[0])
 
 
 
