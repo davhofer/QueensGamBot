@@ -179,7 +179,7 @@ async def challenge(ctx, name: str):
         msg += '\nSo are you gonna accept like the *fearless grandmaster* you are, or chicken out? :triumph:\n\n'
         msg += 'chess.com stats:\n'
         if p1.name not in name_mapping.keys():
-            msg += '{0} has not connected his chess.com username yet! :open_mouth:\n\n'.format(p1.nick)
+            msg += '{0} has not connected his chess.com username yet! :open_mouth:\n\n'.format(p1.mention)
         else:
             msg +=  '**' + p1.nick + '**\n'
             r = get_player_stats(name_mapping[p1.name])
@@ -191,7 +191,7 @@ async def challenge(ctx, name: str):
                     msg += n+": unrated\n"
             msg += '\n'
         if p2.name not in name_mapping.keys():
-            msg += '{0} has not connected his chess.com username yet! :open_mouth:\n\n'.format(p2.nick)
+            msg += '{0} has not connected his chess.com username yet! :open_mouth:\n\n'.format(p2.mention)
         else:
             msg += '**' + p2.nick + '**\n'
             r = get_player_stats(name_mapping[p2.name])
