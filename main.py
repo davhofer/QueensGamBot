@@ -124,7 +124,11 @@ async def ping(ctx):
 
 @bot.command()
 async def q(ctx, name: str, *quote: str):
-    """Add a quote for someone. To see quotes, use $quote"""
+    """Add a quote for someone. To see quotes, use $quote"""$
+    if len(ctx.message.mentions) == 0 or not name.startswith('@'):
+        await ctx.send("Please tag the user you want to add a quote for: `$q @user quote`")
+        return
+    name = ctx.message.mentions[0].name
     if name not in quotes.keys():
         quotes[name] = [' '.join(quote)]
     else:
@@ -138,6 +142,10 @@ async def q(ctx, name: str, *quote: str):
 @bot.command()
 async def quote(ctx, name: str, number=None):
     """Get quotes of someone. To add quotes, use $q. You can leave <number> out to get a random quote, or write 'all' to see all quotes."""
+    if len(ctx.message.mentions) == 0:
+        await ctx.send("Please tag the user you want to get quotes from: `$quote @user [number]`")
+        return
+    name = message.mentions[0].name
     if name not in quotes.keys():
         await ctx.send("{0} doesn't have any quotes yet!".format(name))
         return
@@ -180,6 +188,11 @@ async def chessdotcom(ctx, name: str):
     print(ctx.invoked_subcommand)
     if ctx.invoked_subcommand is None:
         try:
+            if name.startswith('@') and len(ctx.message.mentions) > 0:
+                if ctx.message.mentions[0].name in name_mapping.keys():
+                    name = name_mapping[ctx.message.mentions[0].name]
+                else:
+                    await ctx.send("This user hasn't saved his chess.com username yet!")
             r = get_player_stats(name)
             stat_msg = []
             msg = "Chess.com stats for " + name + "\n"

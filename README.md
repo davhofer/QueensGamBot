@@ -17,3 +17,6 @@ chess engine: with chess notation
 timezone converter
 
 map chess.com name to discord name
+
+
+quotes must mention user
