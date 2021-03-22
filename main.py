@@ -188,6 +188,7 @@ async def chessdotcom(ctx, name: str):
     print(ctx.invoked_subcommand)
     if ctx.invoked_subcommand is None:
         try:
+            print(name)
             if name.startswith('@') and len(ctx.message.mentions) > 0:
                 print(name)
                 print(ctx.message.mentions)
