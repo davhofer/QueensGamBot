@@ -121,18 +121,23 @@ async def ping(ctx):
     await ctx.send(":ping_pong: Pong!")
 
 
+@bot.command()
+async def joined(ctx, *, member: discord.Member): # could also do single argument?
+    await ctx.send('{0} joined on {0.joined_at}'.format(member))
+
+
 #
 # --------------- QUOTES ---------------
 #
 @bot.command()
-async def q(ctx, name: str, *quote: str):
+async def q(ctx, name: str, *, quote: str):
     """Add a quote for someone. To see quotes, use $quote"""
     if not (len(ctx.message.mentions) == 0 or not name.startswith('<@')):
         name = ctx.message.mentions[0].name
     if name not in quotes.keys():
-        quotes[name] = [' '.join(quote)]
+        quotes[name] = [quote]
     else:
-        quotes[name].append(' '.join(quote))
+        quotes[name].append(quote)
     with open('quotes.json', 'w') as f:
          json.dump(quotes, f)
          f.close()
