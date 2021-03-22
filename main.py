@@ -145,7 +145,7 @@ async def quote(ctx, name: str, number=None):
     if len(ctx.message.mentions) == 0:
         await ctx.send("Please tag the user you want to get quotes from: `$quote @user [option]`")
         return
-    name = message.mentions[0].name
+    name = ctx.message.mentions[0].name
     if name not in quotes.keys():
         await ctx.send("{0} doesn't have any quotes yet!".format(name))
         return
