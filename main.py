@@ -168,10 +168,7 @@ async def quote(ctx, name: str, number=None):
         except Exception:
             await ctx.send("Third parameter must either be left out, 'all' or a number!")
 
-@bot.command()
-async def uptime(ctx):
-    """How long the bot's been running"""
-    await ctx.send("Uptime: " + str(datetime.now()-running_since))
+
 
 # @bot.command()
 # async def hi(ctx):
@@ -238,6 +235,7 @@ async def stats(ctx):
     if ctx.invoked_subcommand == None:
         temp(ctx)
         latency(ctx)
+        uptime(ctx)
 
 @stats.command(name='temp')
 async def _temp(ctx):
@@ -257,6 +255,11 @@ async def _latency(ctx):
     # await ctx.send(answer)
     print(str(ms))
     #await ctx.send(str(ms))
+
+@stats.command()
+async def uptime(ctx):
+    """How long the bot's been running"""
+    await ctx.send("Uptime: " + str(datetime.now()-running_since))
 
 
 
