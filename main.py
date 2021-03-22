@@ -189,10 +189,14 @@ async def chessdotcom(ctx, name: str):
     if ctx.invoked_subcommand is None:
         try:
             if name.startswith('@') and len(ctx.message.mentions) > 0:
+                print(name)
+                print(ctx.message.mentions)
                 if ctx.message.mentions[0].name in name_mapping.keys():
                     name = name_mapping[ctx.message.mentions[0].name]
                 else:
                     await ctx.send("This user hasn't saved his chess.com username yet!")
+                    print(name)
+            print(name)
             r = get_player_stats(name)
             stat_msg = []
             msg = "Chess.com stats for " + name + "\n"
