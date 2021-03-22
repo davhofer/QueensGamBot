@@ -232,17 +232,23 @@ async def save_username(ctx, name: str):
 
 
 # dev commands
+@bot.group()
+async def stats(ctx):
+    """Stats, mainly for developing purposes"""
+    if ctx.invoked_subcommand == None:
+        temp(ctx)
+        latency(ctx)
 
-@bot.command()
-async def temp(ctx):
+@stats.command(name='temp')
+async def _temp(ctx):
     """Returns the CPU Temp of the bot"""
     cpu=CPUTemperature()
     temp = str(round(cpu.temparature,1))
     await ctx.send('CPU temperature is ' + temp + '°C')
 
 
-@bot.command()
-async def latency(ctx):
+@stats.command(name='latency')
+async def _latency(ctx):
     """Returns the latency of the bot"""
     ms = (ctx.message.created_at - datetime.utcnow()).microseconds / 1000
     # edit = str(ctx.message.created_at - datetime.utcnow())
