@@ -242,7 +242,7 @@ async def _temp(ctx):
     """Returns the CPU Temp of the bot"""
     cpu=CPUTemperature()
     temp = str(round(cpu.temperature,1))
-    await ctx.send('CPU temperature is ' + temp + '°C')
+    await ctx.send('CPU temperature: ' + temp + '°C')
 
 
 @stats.command(name='latency')
@@ -251,13 +251,13 @@ async def _latency(ctx):
     ms = (ctx.message.created_at - datetime.utcnow()).microseconds / 1000
     # edit = str(ctx.message.created_at - datetime.utcnow())
     # answer = 'Latency is ' +str(int(float(edit.split(':')[2])*1000)) + 'ms'
-    await ctx.send(str(int(ms)) + 'ms')
+    await ctx.send('Latency: ' + str(int(ms)) + 'ms')
     # await ctx.send(answer)
     print(str(ms))
     #await ctx.send(str(ms))
 
-@stats.command()
-async def uptime(ctx):
+@stats.command(name='uptime')
+async def _uptime(ctx):
     """How long the bot's been running"""
     await ctx.send("Uptime: " + str(datetime.now()-running_since))
 
