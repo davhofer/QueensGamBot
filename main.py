@@ -169,6 +169,40 @@ async def quote(ctx, name: str, number=None):
             await ctx.send("Third parameter must either be left out, 'all' or a number!")
 
 
+@bot.command()
+async def challenge(ctx, name: str):
+    """challenge another player to a game of chess"""
+    if len(ctx.message.mentions) > 0:
+        p1 = ctx.message.author
+        p2 = ctx.message.mentions[0]
+        msg = '{0}, {1} challenges you to a game of chess!'.format(p2.mention, p1.mention)
+        msg += '\nSo are you gonna accept like the fearless grandmaster you are or chicken out? :triumph\n\n'
+        msg += 'chess.com stats:\n'
+        if p1.name not in name_mapping.keys():
+            msg += '{0} has not connected his chess.com username yet! :open_mouth:\n\n'.format(p1.nick)
+        else:
+            msg += p1.nick + '\n'
+            r = get_player_stats(name_mapping[p1.name])
+            for n in ['bullet','blitz','rapid','daily']:
+                try:
+                    rating = r.json['stats']["chess_"+n]['last']['rating']
+                    msg += n+": "+str(rating)+"\n"
+                except Exception:
+                    msg += n+": unrated\n"
+            msg += '\n'
+        if p2.name not in name_mapping.keys():
+            msg += '{0} has not connected his chess.com username yet! :open_mouth:\n\n'.format(p2.nick)
+        else:
+            msg += p2.nick + '\n'
+            r = get_player_stats(name_mapping[p2.name])
+            for n in ['bullet','blitz','rapid','daily']:
+                try:
+                    rating = r.json['stats']["chess_"+n]['last']['rating']
+                    msg += n+": "+str(rating)+"\n"
+                except Exception:
+                    msg += n+": unrated\n"
+            msg += '\n'
+        
 
 # @bot.command()
 # async def hi(ctx):
@@ -178,36 +212,34 @@ async def quote(ctx, name: str, number=None):
 #
 #     await ctx.send(msg)
 
-@bot.group()
+@bot.command()
 async def chessdotcom(ctx, name: str):
     """Get chess.com stats and info about this player"""
-    print(ctx.invoked_subcommand)
-    if ctx.invoked_subcommand is None:
-        try:
+    try:
 
-            if len(ctx.message.mentions) > 0:
-                print(name)
-                print(ctx.message.mentions)
-                if ctx.message.mentions[0].name in name_mapping.keys():
-                    name = name_mapping[ctx.message.mentions[0].name]
-                else:
-                    await ctx.send("This user hasn't saved his chess.com username yet!")
-                    print(name)
+        if len(ctx.message.mentions) > 0:
             print(name)
-            r = get_player_stats(name)
-            stat_msg = []
-            msg = "Chess.com stats for " + name + "\n"
-            for n in ['bullet','blitz','rapid','daily']:
-                try:
-                    rating = r.json['stats']["chess_"+n]['last']['rating']
-                    msg += n+": "+str(rating)+"\n"
-                except Exception:
-                    msg += n+": unrated\n"
-            await ctx.send(msg)
-        except Exception as e:
-            print("E:" + str(e))
-            print(Exception)
-            await ctx.send("There is no chess.com user with that username!")
+            print(ctx.message.mentions)
+            if ctx.message.mentions[0].name in name_mapping.keys():
+                name = name_mapping[ctx.message.mentions[0].name]
+            else:
+                await ctx.send("This user hasn't saved his chess.com username yet!")
+                print(name)
+        print(name)
+        r = get_player_stats(name)
+        stat_msg = []
+        msg = "Chess.com stats for " + name + "\n"
+        for n in ['bullet','blitz','rapid','daily']:
+            try:
+                rating = r.json['stats']["chess_"+n]['last']['rating']
+                msg += n+": "+str(rating)+"\n"
+            except Exception:
+                msg += n+": unrated\n"
+        await ctx.send(msg)
+    except Exception as e:
+        print("E:" + str(e))
+        print(Exception)
+        await ctx.send("There is no chess.com user with that username!")
 #
 # @chessdotcom.command(name="testname")
 # async def _chessdotcom(ctx, username: str):
@@ -258,8 +290,8 @@ async def _latency(ctx):
 
 @stats.command(name='uptime')
 async def _uptime(ctx):
-    """How long the bot's been running"""
-    await ctx.send("Uptime: " + str(datetime.now()-running_since))
+    """Returns how long the bot's been running"""
+    await ctx.send("Uptime: " + str(datetime.now()-running_since)-split('.')[0])
 
 
 
