@@ -1,6 +1,7 @@
 import discord
 from discord.ext import commands
 import json
+from dotenv import load_dotenv
 import os
 import logging
 import random
@@ -8,22 +9,28 @@ from datetime import datetime
 from chessdotcom import get_player_stats
 from gpiozero import CPUTemperature
 import nest_asyncio
+
+
+# ------------------------------
+# SETUP
+# ------------------------------
 nest_asyncio.apply()
 
+load_dotenv()
 
-with open('.env','r') as f:
-    token = f.readline()
-    f.close()
+DISCORD_TOKEN = os.getenv("DISCORD_TOKEN")
 
 with open('data.json') as f:
     data = json.load(f)
     f.close()
 
+with open('quotes.json') as f:
+    quotes = json.load(f)
+    f.close()
+
 insults = data['insults']
 name_mapping = data['name_mapping']
 running_since = datetime.now()
-
-
 
 logger = logging.getLogger('discord')
 logger.setLevel(logging.DEBUG)
@@ -31,10 +38,10 @@ handler = logging.FileHandler(filename='discord.log', encoding='utf-8', mode='w'
 handler.setFormatter(logging.Formatter('%(asctime)s:%(levelname)s:%(name)s: %(message)s'))
 logger.addHandler(handler)
 
-with open('quotes.json') as f:
-    quotes = json.load(f)
-    f.close()
 
+# ------------------------------
+# BOT
+# ------------------------------
 description = ''' Queens GamBot'''
 
 intents = discord.Intents.default()
@@ -50,38 +57,28 @@ async def on_ready():
     print(bot.user.id)
     print('------')
 
-# @bot.command()
-# async def add(ctx, left:int, right:int):
-#     """Add two numbers"""
-#     await ctx.send(left + right)
 
+# ------------------------------
+# COMMANDS
+# ------------------------------
 @bot.before_invoke
 async def preprocess(message):
-    print("before invoke")
+    #print("before invoke")
+    return
 
+#
+# --------------- Various Commands ---------------
+#
 @bot.command()
 async def roll(ctx):
     """Get a random number between 0 and 100"""
     result = str(random.randint(0,100))
     await ctx.send(result)
 
-
 @bot.command()
 async def choose(ctx, *choices: str):
     """Choose between multiple choices"""
     await ctx.send(random.choice(choices))
-
-# @bot.command()
-# async def repeat(ctx, times: int, content='repeating...'):
-#     """Repeats a message multiple times"""
-#     for i in range(times):
-#         await ctx.send(content)
-
-# @bot.command()
-# async def joined(ctx, member: discord.Member):
-#     """do stuff when a member joins"""
-#     #await ctx.send('{0.name} joined in {0.joined_at}'.format(member))
-#     return
 
 @bot.group()
 async def cool(ctx):
@@ -104,16 +101,19 @@ async def _bot(ctx):
     """Is david cool?"""
     await ctx.send('Yes, {0.subcommand_passed} is cool.'.format(ctx))
 
-
 @cool.command(name='lukas',aliases=['Lukas','Kazar','@KazarEzClap'])
 async def _bot(ctx):
     """Is lukas cool?"""
     await ctx.send('Yes, {0.subcommand_passed} is cool.'.format(ctx))
 
+
+
 @bot.command()
 async def author(ctx):
     """The dude who wrote this"""
     await ctx.send("I created myself. Jokes on you.")
+
+
 
 @bot.command()
 async def ping(ctx):
@@ -121,7 +121,9 @@ async def ping(ctx):
     await ctx.send(":ping_pong: Pong!")
 
 
-
+#
+# --------------- QUOTES ---------------
+#
 @bot.command()
 async def q(ctx, name: str, *quote: str):
     """Add a quote for someone. To see quotes, use $quote"""
@@ -169,6 +171,10 @@ async def quote(ctx, name: str, number=None):
             await ctx.send("Third parameter must either be left out, 'all' or a number!")
 
 
+
+#
+# --------------- CHESS COMMANDS ---------------
+#
 @bot.command()
 async def challenge(ctx, name: str):
     """challenge another player to a game of chess"""
@@ -206,13 +212,6 @@ async def challenge(ctx, name: str):
     else:
         await ctx.send("Please tag the player you want to challenge!")
 
-# @bot.command()
-# async def hi(ctx):
-#     """Say hi!"""
-#     greetings = ["Hello", "Hi", "Howdy", "Sup", "wassup", "How you doin'","What's popping"]
-#     msg = random.choice(greetings)+", " + ctx.message.author.mention
-#
-#     await ctx.send(msg)
 
 @bot.command()
 async def chessdotcom(ctx, name: str):
@@ -241,15 +240,7 @@ async def chessdotcom(ctx, name: str):
         print("E:" + str(e))
         print(Exception)
         await ctx.send("There is no chess.com user with that username!")
-#
-# @chessdotcom.command(name="testname")
-# async def _chessdotcom(ctx, username: str):
-#     """save your chess.com username"""
-#     name_mapping[ctx.message.author] = username
-#     with open('data.json', 'w') as f:
-#          json.dump(data, f)
-#          f.close()
-#     await ctx.send('chess.com username saved!')
+
 
 @bot.command(name="username")
 async def save_username(ctx, name: str):
@@ -261,7 +252,9 @@ async def save_username(ctx, name: str):
     await ctx.send('chess.com username saved!')
 
 
-# dev commands
+#
+# --------------- DEV COMMANDS ---------------
+#
 @bot.group()
 async def stats(ctx):
     """Stats, mainly for developing purposes"""
@@ -295,7 +288,9 @@ async def _uptime(ctx):
     await ctx.send("Uptime: " + str(datetime.now()-running_since).split('.')[0])
 
 
-
+#
+# --------------- ADMIN COMMANDS ---------------
+#
 @bot.group()
 @commands.has_any_role('MC','admin')
 async def admin(ctx):
@@ -320,4 +315,8 @@ async def on_command_error(ctx, error):
 
 
 
-bot.run(token)
+
+# ------------------------------
+# RUN
+# ------------------------------
+bot.run(DISCORD_TOKEN)
