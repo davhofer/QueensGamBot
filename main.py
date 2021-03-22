@@ -202,7 +202,9 @@ async def challenge(ctx, name: str):
                 except Exception:
                     msg += n+": unrated\n"
             msg += '\n'
-        
+        await ctx.send(msg)
+    else:
+        await ctx.send("Please tag the player you want to challenge!")
 
 # @bot.command()
 # async def hi(ctx):
