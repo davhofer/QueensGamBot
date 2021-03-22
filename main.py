@@ -125,7 +125,7 @@ async def ping(ctx):
 @bot.command()
 async def q(ctx, name: str, *quote: str):
     """Add a quote for someone. To see quotes, use $quote"""
-    if len(ctx.message.mentions) == 0 or not name.startswith('@'):
+    if len(ctx.message.mentions) == 0 or not name.startswith('<@'):
         await ctx.send("Please tag the user you want to add a quote for: `$q @user quote`")
         return
     name = ctx.message.mentions[0].name
@@ -188,8 +188,8 @@ async def chessdotcom(ctx, name: str):
     print(ctx.invoked_subcommand)
     if ctx.invoked_subcommand is None:
         try:
-            print(name)
-            if name.startswith('@') and len(ctx.message.mentions) > 0:
+
+            if len(ctx.message.mentions) > 0:
                 print(name)
                 print(ctx.message.mentions)
                 if ctx.message.mentions[0].name in name_mapping.keys():
