@@ -6,7 +6,7 @@ import os
 import logging
 import random
 from datetime import datetime
-from chessdotcom import get_player_stats
+from chessdotcom import get_player_stats, client
 from gpiozero import CPUTemperature
 import nest_asyncio
 
@@ -123,7 +123,7 @@ async def ping(ctx):
 
 @bot.command()
 async def joined(ctx, *, member: discord.Member): # could also do single argument?
-    await ctx.send('{0} joined on {0.joined_at}'.format(member))
+    await ctx.send('{0} joined on {0.joined_at}'.format(member.name))
 
 
 #
@@ -255,6 +255,16 @@ async def save_username(ctx, name: str):
          json.dump(data, f)
          f.close()
     await ctx.send('chess.com username saved!')
+
+
+# implement winrate etc for chessdotcom stats
+client.get_player_stats('isThisLlCHESS').json['stats']['chess_daily']['record']
+
+# Leaderboard
+# example
+r = client.get_tournament_round_group_details('rapid-101-2191510',2,1)
+l = r.json['tournament_round_group']['players']
+print(l)
 
 
 #
