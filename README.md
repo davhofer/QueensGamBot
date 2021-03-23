@@ -5,19 +5,19 @@ Discord Bot
 
 
 
-***tbd***
-announce tournaments
+***To be done***  
 
-club leaderboard, club stats etc.
+- club leaderboard, club stats etc.
 
-chess engine: with chess notation
+- improve challenge command. timer, $accept, $reject
 
-timezone converter?
+- $signup for tournaments
+  $tournament for admins
+  -> announce tournament etc
 
-map chess.com name to discord name (done)
-also in other direction?
+  - chess engine: with chess notation
 
-improve challenge command. timer, $accept, $reject
+  - timezone converter?
 
-$signup for tournaments
-$tournament for admins
+  - map chess.com name to discord name (done)
+    also in other direction?
