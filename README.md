@@ -6,17 +6,18 @@ Discord Bot
 
 
 ***tbd***
-lichess info?
-
 announce tournaments
 
-club leaderboard
+club leaderboard, club stats etc.
 
 chess engine: with chess notation
 
-timezone converter
+timezone converter?
 
-map chess.com name to discord name
+map chess.com name to discord name (done)
+also in other direction?
 
+improve challenge command. timer, $accept, $reject
 
-quotes must mention user
+$signup for tournaments
+$tournament for admins

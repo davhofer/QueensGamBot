@@ -108,11 +108,11 @@ async def _bot(ctx):
 
 
 
-@bot.command()
-async def author(ctx):
-    """The dude who wrote this"""
-    await ctx.send("I created myself. Jokes on you.")
-
+# @bot.command()
+# async def author(ctx):
+#     """The dude who wrote this"""
+#     await ctx.send("I created myself. Jokes on you.")
+#
 
 
 @bot.command()
@@ -289,13 +289,15 @@ async def _temp(ctx):
 @stats.command(name='latency')
 async def _latency(ctx):
     """Returns the latency of the bot"""
-    ms = (ctx.message.created_at - datetime.utcnow()).microseconds / 1000
-    # edit = str(ctx.message.created_at - datetime.utcnow())
-    # answer = 'Latency is ' +str(int(float(edit.split(':')[2])*1000)) + 'ms'
-    await ctx.send('Latency: ' + str(int(ms)) + 'ms')
-    # await ctx.send(answer)
+    ms = (datetime.utcnow() - ctx.message.created_at).microseconds / 1000
+
+    now = datetime.now()
+    await ctx.send('Latency (user <-> server <-> bot), plus overhead: ' + str(int(ms)) + 'ms')
+    ms2 = (datetime.now() - now).microseconds / 1000
+
+    await ctx.send('Latency (bot <-> server): ' + str(int(ms2)) + 'ms')
     print(str(ms))
-    #await ctx.send(str(ms))
+    print(str(ms2))
 
 @stats.command(name='uptime')
 async def _uptime(ctx):
@@ -325,7 +327,7 @@ async def on_command_error(ctx, error):
         await ctx.send("you're too weak to use this command bruh")
     else:
         print(error)
-        await ctx.send("yeah uhm listen, this ain't gonna work...")
+        await ctx.send("yeah uhm listen, this ain't gonna work... ($help or $help <command> if you're clueless)")
 
 
 
