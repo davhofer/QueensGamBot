@@ -99,12 +99,12 @@ async def _bot(ctx):
 @cool.command(name='david',aliases=['@david','dave'])
 async def _bot(ctx):
     """Is david cool?"""
-    await ctx.send('Yes, {0.subcommand_passed} is cool.'.format(ctx))
+    await ctx.send('Yes, {0} is cool.'.format(ctx.subcommand_passed))
 
 @cool.command(name='lukas',aliases=['Lukas','Kazar','@KazarEzClap'])
 async def _bot(ctx):
     """Is lukas cool?"""
-    await ctx.send('Yes, {0.subcommand_passed} is cool.'.format(ctx))
+    await ctx.send('Yes, {0} is cool.'.format(ctx.subcommand_passed))
 
 
 
@@ -123,7 +123,7 @@ async def ping(ctx):
 
 @bot.command()
 async def joined(ctx, *, member: discord.Member): # could also do single argument?
-    await ctx.send('{0} joined on {0.joined_at}'.format(member.name))
+    await ctx.send('{0.name} joined on {0.joined_at}'.format(member))
 
 
 #
@@ -291,9 +291,9 @@ async def _latency(ctx):
     """Returns the latency of the bot"""
     ms = (datetime.utcnow() - ctx.message.created_at).microseconds / 1000
 
-    now = datetime.now()
+    before = datetime.now()
     await ctx.send('Latency (user <-> server <-> bot), plus overhead: ' + str(int(ms)) + 'ms')
-    ms2 = (datetime.now() - now).microseconds / 1000
+    ms2 = (datetime.now() - before).microseconds / 1000
 
     await ctx.send('Latency (bot <-> server): ' + str(int(ms2)) + 'ms')
     print(str(ms))
