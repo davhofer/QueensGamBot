@@ -292,12 +292,11 @@ async def _latency(ctx):
     ms = (datetime.utcnow() - ctx.message.created_at).microseconds / 1000
 
     before = datetime.now()
-    await ctx.send('Latency (user <-> server <-> bot), plus overhead: ' + str(int(ms)) + 'ms')
+    await ctx.send('Latency: ' + str(int(ms)) + 'ms')
     ms2 = (datetime.now() - before).microseconds / 1000
 
-    await ctx.send('Latency (bot <-> server): ' + str(int(ms2)) + 'ms')
-    print(str(ms))
-    print(str(ms2))
+    await ctx.send('Message delay: ' + str(int(ms2)) + 'ms')
+
 
 @stats.command(name='uptime')
 async def _uptime(ctx):
