@@ -74,12 +74,9 @@ async def preprocess(ctx):
     msg = ctx.message.content
     appendix = ''
 
-    if len(ctx.message.mentions) > 0:
-        appendix = ', where '
     for u in ctx.message.mentions:
-        msg.replace('<@!'+str(u.id)+'>',u.mention)
-        appendix += u.mention + ' = ' + str(u) + ' | '
-    e = str(datetime.today()) + ' ' + str(datetime.now()) + '   ' + str(ctx.author) + ': "' + msg + '"' + appendix + '\n'
+        msg = msg.replace('<@!' + str(u.id) + '>', u.mention + '(' + str(u) + ')')
+    e = str(datetime.today()) + ' ' + str(datetime.now()) + '   ' + str(ctx.author) + ': "' + msg + '"' + '\n'
     f.write(e)
     f.close()
     return
