@@ -71,7 +71,10 @@ async def on_ready():
 async def preprocess(ctx):
     #print("before invoke")
     f = open('commands.log','a')
-    e = str(datetime.today()) + ' ' + str(datetime.now()) + '   ' + str(ctx.author) + ': ' + str(ctx.message.content) + '\n'
+    msg = ctx.message.content
+    for u in ctx.message.mentions:
+        msg.replace('<!'+str(u.id)+'>',u.mention)
+    e = str(datetime.today()) + ' ' + str(datetime.now()) + '   ' + str(ctx.author) + ': ' + str(msg) + '\n'
     f.write(e)
     f.close()
     return
@@ -134,7 +137,7 @@ async def ping(ctx):
 @bot.command()
 async def joined(ctx, *, member: discord.Member):
     """see when a specific member joined"""
-    await ctx.send('{0} joined on {0.joined_at}'.format(member.name))
+    await ctx.send('{0.name} joined on {0.joined_at}'.format(member))
 
 
 @bot.command()
