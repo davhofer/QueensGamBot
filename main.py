@@ -73,6 +73,9 @@ async def preprocess(ctx):
     f = open('commands.log','a')
     msg = ctx.message.content
     for u in ctx.message.mentions:
+        print(u.id)
+        print(u)
+        print(u.name)
         msg.replace('<!'+str(u.id)+'>',u.mention)
     e = str(datetime.today()) + ' ' + str(datetime.now()) + '   ' + str(ctx.author) + ': ' + str(msg) + '\n'
     f.write(e)
