@@ -139,7 +139,7 @@ async def joined(ctx, *, member: discord.Member):
 
 @bot.command()
 async def inspire(ctx):
-    """inspires you! Sends a quote from inspirobot.me, an AI that creates "inspirational quotes" ;)"""
+    """inspires you! Sends a quote from inspirobot.me, an AI that creates "inspirational quotes" ;) \n Disclaimer: these quotes are not our own and are artificially created!"""
     msg = await ctx.send("Please be patient, image is loading...")
 
     if not os.system('cd inspirobot-bot && node lib/inspirobot.js 1') == 0:
