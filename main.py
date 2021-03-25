@@ -71,7 +71,7 @@ async def on_ready():
 async def preprocess(ctx):
     #print("before invoke")
     f = open('commands.log','a')
-    e = str(datetime.today()) + ' ' + str(datetime.now()) + '   ' + str(ctx.author) + ': ' + str(ctx.message) + '\n'
+    e = str(datetime.today()) + ' ' + str(datetime.now()) + '   ' + str(ctx.author) + ': ' + str(ctx.message.content) + '\n'
     f.write(e)
     f.close()
     return
