@@ -72,12 +72,14 @@ async def preprocess(ctx):
     #print("before invoke")
     f = open('commands.log','a')
     msg = ctx.message.content
+    appendix = ''
+
+    if len(ctx.message.mentions) > 0:
+        appendix = ', where '
     for u in ctx.message.mentions:
-        print(u.id)
-        print(u)
-        print(u.name)
-        msg.replace('<!'+str(u.id)+'>',u.mention)
-    e = str(datetime.today()) + ' ' + str(datetime.now()) + '   ' + str(ctx.author) + ': ' + str(msg) + '\n'
+        msg.replace('<@!'+str(u.id)+'>',u.mention)
+        appendix += u.mention + ' = ' + str(u) + ' | '
+    e = str(datetime.today()) + ' ' + str(datetime.now()) + '   ' + str(ctx.author) + ': "' + msg + '"' + appendix + '\n'
     f.write(e)
     f.close()
     return
