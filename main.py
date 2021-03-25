@@ -9,6 +9,8 @@ from datetime import datetime
 from chessdotcom import get_player_stats, client
 from gpiozero import CPUTemperature
 import nest_asyncio
+import time
+
 
 
 # ------------------------------
@@ -39,6 +41,10 @@ handler.setFormatter(logging.Formatter('%(asctime)s:%(levelname)s:%(name)s: %(me
 logger.addHandler(handler)
 
 
+# CHECK/CHANGE logging
+# Log commands used
+
+
 # ------------------------------
 # BOT
 # ------------------------------
@@ -62,8 +68,12 @@ async def on_ready():
 # COMMANDS
 # ------------------------------
 @bot.before_invoke
-async def preprocess(message):
+async def preprocess(ctx):
     #print("before invoke")
+    f = open('commands.log','a')
+    e = str(datetime.today()) + ' ' + str(datetime.now()) + '   ' + str(ctx.author) + ': ' + ctx.message + '\n'
+    f.write(e)
+    f.close()
     return
 
 #
@@ -122,8 +132,38 @@ async def ping(ctx):
 
 
 @bot.command()
-async def joined(ctx, *, member: discord.Member): # could also do single argument?
+async def joined(ctx, *, member: discord.Member):
+    """see when a specific member joined"""
     await ctx.send('{0} joined on {0.joined_at}'.format(member.name))
+
+
+@bot.command()
+async def inspire(ctx):
+    """inspires you! Sends a quote from inspirobot.me, an AI that creates "inspirational quotes" ;)"""
+    msg = await ctx.send("Please be patient, image is loading...")
+
+    if not os.system('cd inspirobot-bot && node lib/inspirobot.js 1') == 0:
+            await ctx.send("download go ded, sorry :frowning:")
+            return
+    counter = 0
+    while True:
+        if counter==5:
+            await ctx.send("Download error. Please try again.")
+            return
+        time.sleep(1)
+        counter++
+        for fname in os.listdir('./inspirobot-bot/'):
+            if fname.endswith('.jpg'):
+                msg.delete()
+                await channel.send(file=discord.File('./inspirobot-bot/'+fname))
+                #move file
+                os.rename('./inspirobot-bot/'+fname,'./inspirobot-bot/img/'+fname)
+                return
+
+
+
+
+
 
 
 #
