@@ -147,7 +147,7 @@ async def inspire(ctx):
             return
     counter = 0
     while True:
-        if counter==5:
+        if counter==8:
             await ctx.send("Download error. Please try again.")
             return
         time.sleep(1)
