@@ -155,7 +155,7 @@ async def inspire(ctx):
         for fname in os.listdir('./inspirobot-bot/'):
             if fname.endswith('.jpg'):
                 await msg.delete()
-                await channel.send(file=discord.File('./inspirobot-bot/'+fname))
+                await ctx.send(file=discord.File('./inspirobot-bot/'+fname))
                 #move file
                 os.rename('./inspirobot-bot/'+fname,'./inspirobot-bot/img/'+fname)
                 return
