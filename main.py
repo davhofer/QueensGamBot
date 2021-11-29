@@ -114,7 +114,7 @@ async def _bot(ctx):
     """Is the bot cool?"""
     await ctx.send('Yes, the bot is cool.')
 
-@cool.command(name='david',aliases=['@david','dave','david'])
+@cool.command(name='david',aliases=['@david','dave'])
 async def _bot(ctx):
     """Is david cool?"""
     await ctx.send('Yes, {0} is cool.'.format(ctx.subcommand_passed))
