@@ -52,14 +52,15 @@ def driver_explicitWait(driver,xpath,condition="clickable",timeout=30):
 
 def get_signup_time(lesson_num,driver):
 
+    # signup starts a day before
     weekdays = {
-        'Mo': 'mon',
-        'Di': 'tue',
-        'Mi': 'wed',
-        'Do': 'thu',
-        'Fr': 'fri',
-        'Sa': 'sat',
-        'So': 'sun'
+        'Di': 'mon',
+        'Mi': 'tue',
+        'Do': 'wed',
+        'Fr': 'thu',
+        'Sa': 'fri',
+        'So': 'sat',
+        'Mo': 'sun'
     }
     
     link = "https://schalter.asvz.ch/tn/lessons/<number>"
