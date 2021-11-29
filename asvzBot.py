@@ -52,15 +52,14 @@ def driver_explicitWait(driver,xpath,condition="clickable",timeout=30):
 
 def get_signup_time(lesson_num,driver):
 
-    # signup starts a day before
     weekdays = {
-        'Di': '1',
-        'Mi': '2',
-        'Do': '3',
-        'Fr': '4',
-        'Sa': '5',
-        'So': '6',
-        'Mo': '0'
+        'Mo': 'mon',
+        'Di': 'tue',
+        'Mi': 'wed',
+        'Do': 'thu',
+        'Fr': 'fri',
+        'Sa': 'sat',
+        'So': 'sun'
     }
     
     link = "https://schalter.asvz.ch/tn/lessons/<number>"
@@ -125,7 +124,7 @@ def asvz_signup(args,lesson_num,username,password):
     
 
 
-    def explicitWait(xpath,condition="clickable",timeout=30):
+    def explicitWait(xpath,condition="clickable",timeout=40):
         return driver_explicitWait(driver,xpath,condition,timeout)
 
 
@@ -206,15 +205,15 @@ def asvz_signup(args,lesson_num,username,password):
 
     def f1():
         try:
-            explicitWait("//button[@id='btnRegister']",condition="present",timeout=30)
+            explicitWait("//button[@id='btnRegister']",condition="present",timeout=40)
         except:
-            raise Exception("Timeout exception: waiting for register button")
+            print("Timeout exception: waiting for register button")
 
     def f2():
         try:
-            explicitWait("//button[@name='_eventId_proceed']",condition="present",timeout=30)
+            explicitWait("//button[@name='_eventId_proceed']",condition="present",timeout=40)
         except:
-            raise Exception("Timeout exception: waiting for accept button")
+            print("Timeout exception: waiting for accept button")
 
     def wait_then_signup(t):
         if datetime.datetime.now() < t:
@@ -234,7 +233,7 @@ def asvz_signup(args,lesson_num,username,password):
     p2.start()
 
 
-    for i in range(20):
+    for i in range(30):
 
         # check if either process has finished, react accordingly
         if not p1.is_alive():
@@ -257,8 +256,8 @@ def asvz_signup(args,lesson_num,username,password):
 
         time.sleep(1)
     
-    raise Exception("Error: Did not reach signup page!")
-
+    #raise Exception("Error: Did not reach signup page!")
+    print("Error: did not reach signup page!")
             
 
 
