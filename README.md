@@ -1,11 +1,15 @@
 # QueensGamBot
+
 Discord Bot
 
+**_IDEAS_**
+make code so that the bot updates itself?
 
+- pull from github
+- stop itself
+- restart
 
-
-
-***To be done***  
+**_To be done_**
 
 - club leaderboard, club stats etc.
 
@@ -13,7 +17,7 @@ Discord Bot
 
 - $signup for tournaments  
   $tournament for admins  
-  -> announce tournament etc  
+  -> announce tournament etc
 
 - chess engine: with chess notation
 
@@ -21,3 +25,5 @@ Discord Bot
 
 - map chess.com name to discord name (done)
   also in other direction?
+
+- more stuff, not chess related: i.e. add brainfuck interpreter

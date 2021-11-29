@@ -1,3 +1,4 @@
+from signup_script import SIGNUP_LIST_PATH
 import discord
 from discord.ext import commands
 import json
@@ -10,13 +11,15 @@ from chessdotcom import get_player_stats, client
 from gpiozero import CPUTemperature
 import nest_asyncio
 import time
+import subprocess
 
-
+from asvzBot import asvz_signup, get_driver, get_signup_time
 
 # ------------------------------
 # SETUP
 # ------------------------------
 nest_asyncio.apply()
+
 
 load_dotenv()
 
@@ -62,6 +65,7 @@ async def on_ready():
     print(bot.user.name)
     print(bot.user.id)
     print('------')
+    await message.guild.get_member(bot.user.id).edit(nick="Queens GamBot")
 
 
 # ------------------------------
@@ -75,7 +79,7 @@ async def preprocess(ctx):
     appendix = ''
 
     for u in ctx.message.mentions:
-        msg = msg.replace('<@!' + str(u.id) + '>', u.mention + '(' + str(u) + ')')
+        msg = msg.replace('<@!' + str(u.id) + '>', '@' + u.nick + '(' + str(u) + ')')
     e = str(datetime.today()) + ' ' + str(datetime.now()) + '   ' + str(ctx.author) + ': "' + msg + '"' + '\n'
     f.write(e)
     f.close()
@@ -111,12 +115,12 @@ async def _bot(ctx):
     """Is the bot cool?"""
     await ctx.send('Yes, the bot is cool.')
 
-@cool.command(name='david',aliases=['@david','dave'])
+@cool.command(name='david',aliases=['@david','dave','david'])
 async def _bot(ctx):
     """Is david cool?"""
     await ctx.send('Yes, {0} is cool.'.format(ctx.subcommand_passed))
 
-@cool.command(name='lukas',aliases=['Lukas','Kazar','@KazarEzClap'])
+@cool.command(name='lukas',aliases=['Lukas','Kazar','@KazarEzClap','kazar'])
 async def _bot(ctx):
     """Is lukas cool?"""
     await ctx.send('Yes, {0} is cool.'.format(ctx.subcommand_passed))
@@ -168,6 +172,12 @@ async def inspire(ctx):
 
 
 
+
+@bot.command()
+async def say(ctx, *, msg: str):
+    """say a message out loud"""
+    show = await ctx.send(msg, tts=True)
+    await show.delete()
 
 
 
@@ -263,7 +273,7 @@ async def challenge(ctx, name: str):
         await ctx.send("Please tag the player you want to challenge!")
 
 
-@bot.command()
+@bot.command(aliases=['rating'])
 async def chessdotcom(ctx, name: str):
     """Get chess.com stats and info about this player"""
     try:
@@ -302,15 +312,95 @@ async def save_username(ctx, name: str):
     await ctx.send('chess.com username saved!')
 
 
-# implement winrate etc for chessdotcom stats
-client.get_player_stats('isThisLlCHESS').json['stats']['chess_daily']['record']
+# # implement winrate etc for chessdotcom stats
+# client.get_player_stats('isThisLlCHESS').json['stats']['chess_daily']['record']
 
-# Leaderboard
-# example
-r = client.get_tournament_round_group_details('rapid-101-2191510',2,1)
-l = r.json['tournament_round_group']['players']
-print(l)
+# # Leaderboard
+# # example
+# r = client.get_tournament_round_group_details('rapid-101-2191510',2,1)
+# l = r.json['tournament_round_group']['players']
+# print(l)
 
+#
+# --------------- ASVZ BOT COMMANDS ---------------
+#
+# how to handle the user login data? make it so only I can use the command and credentials are saved on pi? or make it so that others can signup as well?
+
+# add id, lesson num, time to signups_list
+# add cronjob for id
+@bot.group()
+async def asvz(ctx):
+    """automatically sign up for asvz lessons."""
+    if ctx.invoked_subcommand == None:
+        await ctx.send("Must specify a subcommand!")
+
+@asvz.command(name='start')
+async def _start(ctx, lesson_num: int, frequency="weekly"):
+    """signup for a specific asvz lesson, one-time or on a weekly basis"""
+    if ctx.message.author.id != 237562253761708032:
+        await ctx.send("You're not david, you son of a monkey! (Command not yet implemented for the rest).")
+        return
+
+    if frequency=="one-time":
+        try:
+            await ctx.send("Signup in progress...")
+            asvz_signup(['--raspbian'],str(lesson_num),os.getenv("ETHZUSERNAME"),os.getenv("ETHZPASSWORD"))
+            await ctx.send("Signup completed successfully! Please check yourself whether you got a spot or not.")
+        except Exception as e:
+            await ctx.send(f"Error during signup: \n {str(e)}")
+        return 
+
+
+
+    BOT_PATH = os.getenv("BOT_PATH")
+
+    # TODO: make sure event/signup is not in the past
+
+    # get starttime of the signup for the lesson
+    driver = get_driver(['--raspbian'])
+    st = get_signup_time(lesson_num,driver).split(' ') # min hour day month year weekday
+    weekday = st[5]
+
+    # subtract x minuts from starttime, at this time the command to run the signup bot will be executed
+    timedelta_minutes_before = 6
+    t = datetime.datetime(minute=st[0],hour=st[1],day=st[2],month=st[3],year=st[4])
+    d = datetime.timedelta(minutes=timedelta_minutes_before)
+    starttime = t-d
+
+    if t + datetime.timedelta(days=1) <= datetime.datetime.now():
+        await ctx.send("This event is in the past!")
+        return
+
+    # add new id,lesson_num to signups_list
+    try:
+        with open(f'{BOT_PATH}signups_list','a') as f:
+            id = len(f.readlines())-1 
+            f.write(f'{id},{lesson_num}\n')
+    except:
+        with open(f'{BOT_PATH}signups_list','w+') as f:
+            f.write('id,lesson_num')
+            id = 0
+            f.write(f'{id},{lesson_num}\n')
+
+    # create and start cronjob
+    cronjob = f'(crontab -l 2>/dev/null; echo "{starttime.minute} {starttime.hour} * * {weekday} python3 {BOT_PATH}signup_script.py {id} --raspbian") | crontab -'
+    os.system(cronjob)
+
+    await ctx.send(f"Automatic signup for lesson {lesson_num} started.")
+
+    
+@asvz.command(name='stop')
+async def _stop(ctx, lesson_num: int):
+    """Stop the weekly signup for a specific lesson."""
+    await ctx.send("Not yet implemented!")
+
+
+
+
+
+# user can just specify number => single signup, or keyword "weekly" or smth and then bot will go to site (through lesson num) and get relationship of date to link from there
+
+# add new entry to crontab: (crontab -l 2>/dev/null; echo "*/5 * * * * /path/to/job -with args") | crontab -
 
 #
 # --------------- DEV COMMANDS ---------------
@@ -341,6 +431,7 @@ async def _latency(ctx):
     ms2 = (datetime.now() - before).microseconds / 1000
 
     await ctx.send('Message delay: ' + str(int(ms2)) + 'ms')
+    await ctx.send('Internal latency (discord websocket protocol): ' + str(round(bot.latency*1000,1)) + 'ms')
 
 
 @stats.command(name='uptime')
