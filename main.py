@@ -5,7 +5,7 @@ from dotenv import load_dotenv
 import os
 import logging
 import random
-from datetime import datetime
+import datetime
 from chessdotcom import get_player_stats, client
 from gpiozero import CPUTemperature
 import nest_asyncio
@@ -34,7 +34,7 @@ with open('quotes.json') as f:
 
 insults = data['insults']
 name_mapping = data['name_mapping']
-running_since = datetime.now()
+running_since = datetime.datetime.now()
 
 logger = logging.getLogger('discord')
 logger.setLevel(logging.DEBUG)
@@ -79,7 +79,7 @@ async def preprocess(ctx):
 
     for u in ctx.message.mentions:
         msg = msg.replace('<@!' + str(u.id) + '>', '@' + u.nick + '(' + str(u) + ')')
-    e = str(datetime.today()) + ' ' + str(datetime.now()) + '   ' + str(ctx.author) + ': "' + msg + '"' + '\n'
+    e = str(datetime.datetime.today()) + ' ' + str(datetime.datetime.now()) + '   ' + str(ctx.author) + ': "' + msg + '"' + '\n'
     f.write(e)
     f.close()
     return
@@ -423,11 +423,11 @@ async def _temp(ctx):
 @stats.command(name='latency')
 async def _latency(ctx):
     """Returns the latency of the bot"""
-    ms = (datetime.utcnow() - ctx.message.created_at).microseconds / 1000
+    ms = (datetime.datetime.utcnow() - ctx.message.created_at).microseconds / 1000
 
-    before = datetime.now()
+    before = datetime.datetime.now()
     await ctx.send('Latency: ' + str(int(ms)) + 'ms')
-    ms2 = (datetime.now() - before).microseconds / 1000
+    ms2 = (datetime.datetime.now() - before).microseconds / 1000
 
     await ctx.send('Message delay: ' + str(int(ms2)) + 'ms')
     await ctx.send('Internal latency (discord websocket protocol): ' + str(round(bot.latency*1000,1)) + 'ms')
@@ -436,7 +436,7 @@ async def _latency(ctx):
 @stats.command(name='uptime')
 async def _uptime(ctx):
     """Returns how long the bot's been running"""
-    await ctx.send("Uptime: " + str(datetime.now()-running_since).split('.')[0])
+    await ctx.send("Uptime: " + str(datetime.datetime.now()-running_since).split('.')[0])
 
 
 #
