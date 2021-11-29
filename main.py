@@ -330,6 +330,9 @@ async def save_username(ctx, name: str):
 @bot.group()
 async def asvz(ctx):
     """automatically sign up for asvz lessons."""
+    if ctx.message.author.id != 237562253761708032:
+        await ctx.send("That's not for you, you son of a monkey! (Command not yet implemented for the rest).")
+        return
     if ctx.invoked_subcommand == None:
         await ctx.send("Must specify a subcommand!")
 
