@@ -1,4 +1,3 @@
-from signup_script import SIGNUP_LIST_PATH
 import discord
 from discord.ext import commands
 import json

@@ -9,7 +9,7 @@ load_dotenv()
 BOT_PATH = os.getenv("BOT_PATH")
 
 # get job_id as command-line argument from cron job
-job_id = sys.argv[1]
+
 
 # log errors and exceptions to signups.log
 def log(msg):
@@ -53,10 +53,13 @@ def main(job_id):
     os.remove(f'{BOT_PATH}/signups_list')
     os.rename(f'{BOT_PATH}/tmp',f'{BOT_PATH}/signups_list')
 
-try:
-    main(job_id)
-except Exception as e:
-    log(f"Exception when executing signup_script for id {job_id}. \n Msg: {str(e)}")
+
+if __name__ == '__main__':
+    job_id = sys.argv[1]
+    try:
+        main(job_id)
+    except Exception as e:
+        log(f"Exception when executing signup_script for id {job_id}. \n Msg: {str(e)}")
 
 
 
