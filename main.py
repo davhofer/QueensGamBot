@@ -360,7 +360,10 @@ async def _start(ctx, lesson_num, frequency="weekly"):
     st_strings = get_signup_time(lesson_num,driver).split(' ') # min hour day month year weekday
     st = []
     for el in st_strings:
-        st.append(int(el))
+        try:
+            st.append(int(el))
+        except:
+            st.append(el)
     weekday = st[5]
 
     # subtract x minuts from starttime, at this time the command to run the signup bot will be executed
