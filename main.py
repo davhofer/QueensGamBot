@@ -343,7 +343,7 @@ async def _start(ctx, lesson_num, frequency="weekly"):
     if frequency=="one-time":
         try:
             await ctx.send("Signup in progress...")
-            asvz_signup(['--raspbian'],str(lesson_num),os.getenv("ETHZUSERNAME"),os.getenv("ETHZPASSWORD"))
+            asvz_signup(['--raspbian'],lesson_num,os.getenv("ETHZUSERNAME"),os.getenv("ETHZPASSWORD"))
             await ctx.send("Signup completed successfully! Please check yourself whether you got a spot or not.")
         except Exception as e:
             await ctx.send(f"Error during signup: \n {str(e)}")
@@ -357,7 +357,10 @@ async def _start(ctx, lesson_num, frequency="weekly"):
 
     # get starttime of the signup for the lesson
     driver = get_driver(['--raspbian'])
-    st = get_signup_time(lesson_num,driver).split(' ') # min hour day month year weekday
+    st_strings = get_signup_time(lesson_num,driver).split(' ') # min hour day month year weekday
+    st = []
+    for el in st_strings:
+        st.append(int(el))
     weekday = st[5]
 
     # subtract x minuts from starttime, at this time the command to run the signup bot will be executed
