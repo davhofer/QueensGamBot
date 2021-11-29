@@ -54,13 +54,13 @@ def get_signup_time(lesson_num,driver):
 
     # signup starts a day before
     weekdays = {
-        'Di': 'mon',
-        'Mi': 'tue',
-        'Do': 'wed',
-        'Fr': 'thu',
-        'Sa': 'fri',
-        'So': 'sat',
-        'Mo': 'sun'
+        'Di': '1',
+        'Mi': '2',
+        'Do': '3',
+        'Fr': '4',
+        'Sa': '5',
+        'So': '6',
+        'Mo': '0'
     }
     
     link = "https://schalter.asvz.ch/tn/lessons/<number>"
