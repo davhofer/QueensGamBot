@@ -334,7 +334,7 @@ async def asvz(ctx):
         await ctx.send("Must specify a subcommand!")
 
 @asvz.command(name='start')
-async def _start(ctx, lesson_num: int, frequency="weekly"):
+async def _start(ctx, lesson_num, frequency="weekly"):
     """signup for a specific asvz lesson, one-time or on a weekly basis"""
     if ctx.message.author.id != 237562253761708032:
         await ctx.send("You're not david, you son of a monkey! (Command not yet implemented for the rest).")
@@ -389,7 +389,7 @@ async def _start(ctx, lesson_num: int, frequency="weekly"):
 
     
 @asvz.command(name='stop')
-async def _stop(ctx, lesson_num: int):
+async def _stop(ctx, lesson_num):
     """Stop the weekly signup for a specific lesson."""
     await ctx.send("Not yet implemented!")
 
